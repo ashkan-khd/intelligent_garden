@@ -35,6 +35,7 @@ ALLOWED_HOSTS = []
 EXTERNAL_APPS = [
     # 'django_crontab',
     # 'django_cron',
+    # 'django_matplotlib',
 ]
 
 CUSTOM_APPS = [

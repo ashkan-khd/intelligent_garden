@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from dataclasses import asdict, dataclass
+import json
 import time
 import typing
 
@@ -22,9 +23,15 @@ class Sense(ABC):
             return asdict(self)
 
         def to_json(self) -> str:
-            import json
-
             return json.dumps(self.to_dict())
+        
+        @classmethod
+        def from_dict(cls, d: dict):
+            return cls(**d)
+        
+        @classmethod
+        def from_json(cls, d: str):
+            return cls.from_dict(json.loads(d))
 
     def __init__(self, sensor: "Sensor") -> None:
         self.sensor = sensor

@@ -1,7 +1,7 @@
 from django.db import models
 
 from sense.models import Sensor
-from sense.models.services import SenseWaterHeightPercentage
+from sense.models.services import SenseWaterHeightPercentage, DrawUltrasonicFig
 
 
 class UltrasonicSensor(Sensor):
@@ -11,6 +11,7 @@ class UltrasonicSensor(Sensor):
     total_height_cm = models.IntegerField(verbose_name='ارتفاع مخزن', help_text='به سانتی‌متر وارد کنید.')
 
     sense_class = SenseWaterHeightPercentage
+    fig_class = DrawUltrasonicFig
 
     class Meta:
         verbose_name = "سنسور اولتراسونیک"

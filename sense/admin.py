@@ -1,13 +1,16 @@
 from django.contrib import admin
 from django.contrib.admin import ModelAdmin
+from django.http.request import HttpRequest
 
 from sense.models import (
+    SensorFigure,
     LightIntensitySensor,
     SoilMoistureSensor,
     TemperatureHumiditySensor,
     UltrasonicSensor,
     Sensor,
 )
+from utility.admin import create_image_response
 
 
 class SensorAdmin(ModelAdmin):
@@ -18,14 +21,31 @@ class SensorAdmin(ModelAdmin):
         "get_str",
         "name",
     ]
-    readonly_fields = [
-        'get_str'
-    ]
+    readonly_fields = ["get_str", "get_fig"]
+
+    def get_fields(self, request: HttpRequest, instance: Sensor):
+        fields = super().get_fields(request, instance)
+        return [
+            *fields,
+            "get_fig",
+        ]
 
     def get_str(self, instance: Sensor):
         return str(instance)
 
     get_str.short_description = "مشخصه"
+
+    def get_fig(self, instance: Sensor):
+        figure: SensorFigure = instance.get_updated_figure()
+        if figure.file and figure.file.url:
+            return create_image_response(
+                figure.file,
+                width=500,
+                height=500,
+            )
+        return "-"
+
+    get_fig.short_description = "نمودار مربوط به سنسور"
 
 
 @admin.register(LightIntensitySensor)

@@ -1,7 +1,7 @@
 from django.db import models
 
 from sense.models import Sensor
-from sense.models.services import SenseTemperatureHumidity
+from sense.models.services import SenseTemperatureHumidity, DrawTemperatureHumidityFig
 from utility.models import Choices
 
 
@@ -14,6 +14,7 @@ class TemperatureHumiditySensor(Sensor):
     am2302_pin = models.IntegerField(verbose_name="پین am2302")
 
     sense_class = SenseTemperatureHumidity
+    fig_class = DrawTemperatureHumidityFig
 
     class Meta:
         verbose_name = "سنسور دما و رطوبت"

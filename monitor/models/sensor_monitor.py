@@ -12,7 +12,7 @@ if TYPE_CHECKING:
 class SensorMonitor(models.Model):
     sensor = models.OneToOneField(
         to="sense.Sensor",
-        related_name="monitors",
+        related_name="monitor",
         on_delete=models.PROTECT,
         verbose_name="سنسور مربوطه",
     )

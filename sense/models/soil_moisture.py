@@ -1,8 +1,7 @@
 from django.db import models
 
 from sense.models import Sensor
-from sense.models.services import SenseSoilMoisture
-
+from sense.models.services import SenseSoilMoisture, DrawSoilMoistureFig
 
 class SoilMoistureSensor(Sensor):
     # TODO: validate the inputs, for example with choices
@@ -16,6 +15,7 @@ class SoilMoistureSensor(Sensor):
     )
 
     sense_class = SenseSoilMoisture
+    fig_class = DrawSoilMoistureFig
 
     class Meta:
         verbose_name = "سنسور رطوبت خاک"
