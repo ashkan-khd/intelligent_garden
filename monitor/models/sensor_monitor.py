@@ -10,9 +10,9 @@ if TYPE_CHECKING:
 
 
 class SensorMonitor(models.Model):
-    sensor = models.ForeignKey(
+    sensor = models.OneToOneField(
         to="sense.Sensor",
-        related_name="results",
+        related_name="monitors",
         on_delete=models.PROTECT,
         verbose_name="سنسور مربوطه",
     )

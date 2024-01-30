@@ -3,6 +3,8 @@ from dataclasses import asdict, dataclass
 import time
 import typing
 
+from django.conf import settings
+
 if typing.TYPE_CHECKING:
     from sense.models import (
         Sensor,
@@ -28,8 +30,37 @@ class Sense(ABC):
         self.sensor = sensor
 
     @abstractmethod
-    def sense(self) -> typing.Optional["SenseData"]:
+    def _sense(self) -> typing.Optional["SenseData"]:
         pass
+
+    def _handle_exception(self, e):
+        try:
+            raise e
+        except KeyboardInterrupt:
+            pass
+
+    def _final_callback(self):
+        pass
+
+    def __fake_sense(self) -> "SenseData":
+        @dataclass
+        class FakeSenseData(self.SenseData):
+            msg: str
+
+        return FakeSenseData(msg="fake data")
+
+    def sense(self) -> typing.Optional["SenseData"]:
+        if not settings.PRODUCTION:
+            return self.__fake_sense()
+
+        try:
+            print(f"{str(self.sensor)} starting to sense...")
+            return self._sense()
+        except Exception as e:
+            self._handle_exception(e)
+        finally:
+            self._final_callback()
+            print("sensing has finished.")
 
 
 class SenseLightIntensity(Sense):
@@ -39,7 +70,7 @@ class SenseLightIntensity(Sense):
     class SenseData(Sense.SenseData):
         light_level: float
 
-    def sense(self) -> "SenseData":
+    def _sense(self) -> "SenseData":
         import board
         import busio
         import adafruit_bh1750
@@ -63,7 +94,7 @@ class SenseSoilMoisture(Sense):
         GPIO.setup(pin, GPIO.IN)
         return GPIO.input(pin)
 
-    def sense(self) -> "SenseData":
+    def _sense(self) -> "SenseData":
         # Read analog soil moisture level (0-1)
         analog_moisture_level = self.sense_gpio_pin(self.sensor.analog_pin)
 
@@ -71,6 +102,11 @@ class SenseSoilMoisture(Sense):
         digital_moisture_level = self.sense_gpio_pin(self.sensor.digital_pin)
 
         return self.SenseData(analog_moisture_level, digital_moisture_level)
+
+    def _final_callback(self):
+        from RPi import GPIO
+
+        GPIO.cleanup()
 
 
 class SenseTemperatureHumidity(Sense):
@@ -81,7 +117,7 @@ class SenseTemperatureHumidity(Sense):
         temperature: float
         humidity: float
 
-    def sense(self) -> typing.Optional["SenseData"]:
+    def _sense(self) -> typing.Optional["SenseData"]:
         import Adafruit_DHT
 
         # Specify the sensor type (DHT22 in this case)
@@ -131,7 +167,7 @@ class SenseWaterHeightPercentage(Sense):
         distance = (pulse_duration * 34300) / 2  # Distance in centimeters
         return distance
 
-    def sense(self) -> typing.Optional["SenseData"]:
+    def _sense(self) -> typing.Optional["SenseData"]:
         from RPi import GPIO
 
         GPIO.setmode(GPIO.BCM)
@@ -149,3 +185,8 @@ class SenseWaterHeightPercentage(Sense):
             ),
         )
         return self.SenseData(distance, percentage)
+
+    def _final_callback(self):
+        from RPi import GPIO
+
+        GPIO.cleanup()
