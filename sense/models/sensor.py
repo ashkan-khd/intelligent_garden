@@ -20,4 +20,3 @@ class Sensor(models.Model):
     class Meta:
         verbose_name = "سنسور"
         verbose_name_plural = "سنسورها"
-        abstract = True

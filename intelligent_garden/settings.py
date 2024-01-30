@@ -30,8 +30,13 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
+EXTERNAL_APPS = [
+    'django_cron',
+]
+
 CUSTOM_APPS = [
     'sense',
+    'monitor',
     'utility',
 ]
 
@@ -43,7 +48,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
+    
+    *EXTERNAL_APPS,
     *CUSTOM_APPS,
 ]
 
@@ -111,11 +117,13 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'fa'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Tehran'
 
 USE_I18N = True
+
+USE_L10N = True
 
 USE_TZ = True
 
@@ -129,3 +137,7 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CRON_CLASSES = [
+    "monitor.cron.MonitorCronJob",
+]
