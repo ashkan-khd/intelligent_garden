@@ -9,7 +9,7 @@ class TemperatureHumiditySensor(Sensor):
     class Types(Choices):
         DHT22 = Choices.Choice("DHT22", "DHT22")
 
-    tp = models.CharField(choices=Types.get_choices(), verbose_name="نوع سنسور")
+    tp = models.CharField(choices=Types.get_choices(), verbose_name="نوع سنسور", max_length=128)
 
     am2302_pin = models.IntegerField(verbose_name="پین am2302")
 
