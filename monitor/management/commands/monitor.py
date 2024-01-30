@@ -34,4 +34,4 @@ class Command(BaseCommand):
         print("scheduler has started")
         while True:
             self.run_one_task()
-            sleep(60)
+            sleep(10)
