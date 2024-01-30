@@ -8,5 +8,5 @@ class LightIntensitySensor(Sensor):
     sense_class = SenseLightIntensity
 
     class Meta:
-        verbose_name = 'سنسور شدت نور'
-        verbose_name = 'سنسور‌های شدت نور'
+        verbose_name = 'سنسور شدت‌نور'
+        verbose_name_plural = 'سنسورهای شدت‌نور'

@@ -44,17 +44,16 @@ class Sense(ABC):
 
     def __fake_sense(self) -> "SenseData":
         @dataclass
-        class FakeSenseData(self.SenseData):
+        class FakeSenseData(Sense.SenseData):
             msg: str
 
         return FakeSenseData(msg="fake data")
 
     def sense(self) -> typing.Optional["SenseData"]:
-        if not settings.PRODUCTION:
-            return self.__fake_sense()
-
         try:
             print(f"{str(self.sensor)} starting to sense...")
+            if not settings.PRODUCTION:
+                return self.__fake_sense()
             return self._sense()
         except Exception as e:
             self._handle_exception(e)

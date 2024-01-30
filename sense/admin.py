@@ -18,6 +18,9 @@ class SensorAdmin(ModelAdmin):
         "get_str",
         "name",
     ]
+    readonly_fields = [
+        'get_str'
+    ]
 
     def get_str(self, instance: Sensor):
         return str(instance)

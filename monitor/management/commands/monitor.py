@@ -1,18 +1,17 @@
+import os
+from time import sleep
+from typing import Optional
+
+from django.core.management.base import BaseCommand
 from django.db.models import Q, F, Case, When, DateTimeField
 from django.utils import timezone
-from django_cron import CronJobBase, Schedule
 
-from monitor.models.sensor_monitor import SensorMonitor
+from monitor.models import SensorMonitor
 
 
-class MonitorCronJob(CronJobBase):
-    RUN_EVERY_MINS = 0.1  # every 6 seconds
-
-    schedule = Schedule(run_every_mins=RUN_EVERY_MINS)
-    code = "monitor.sensors"  # a unique code
-
-    def get_queryset(self):
-        return (
+class Command(BaseCommand):
+    def run_one_task(self):
+        qs = (
             SensorMonitor.objects.annotate(
                 next_monitor=Case(
                     When(
@@ -26,9 +25,13 @@ class MonitorCronJob(CronJobBase):
             .filter(Q(next_monitor__isnull=True) | Q(next_monitor__lte=timezone.now()))
             .order_by(F("next_monitor").asc(nulls_first=True))
         )
-
-    def do(self):
-        monitor: SensorMonitor = self.get_queryset().first()
+        monitor: Optional[SensorMonitor] = qs.first()
         if monitor is None:
             return
         monitor.monitor()
+
+    def handle(self, *args, **options):
+        print("scheduler has started")
+        while True:
+            self.run_one_task()
+            sleep(60)

@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -32,7 +33,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 EXTERNAL_APPS = [
-    'django_cron',
+    # 'django_crontab',
+    # 'django_cron',
 ]
 
 CUSTOM_APPS = [
@@ -50,8 +52,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     
-    *EXTERNAL_APPS,
     *CUSTOM_APPS,
+    *EXTERNAL_APPS,
 ]
 
 MIDDLEWARE = [
@@ -132,13 +134,21 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-CRON_CLASSES = [
-    "monitor.cron.MonitorCronJob",
-]
+# CRON_CLASSES = [
+#     "monitor.cron.MonitorCronJob",
+# ]
+
+# CRONJOBS = [
+#     # ('*/1 * * * *', 'monitor.cron.monitor_cron'),
+#     ('*/1 * * * *', 'monitor.cron.alaki_cron', '>> /tmp/alaki_cron.log'),
+# ]
