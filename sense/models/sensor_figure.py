@@ -1,3 +1,5 @@
+import os
+from django.core.files import File
 from django.db import models
 
 
@@ -10,6 +12,18 @@ class SensorFigure(models.Model):
     )
 
     file = models.FileField(verbose_name="فایل نمودار", null=True, blank=True)
+
+    def set_new_file(self, file: File):
+        if self.file.url:
+            file_path = self.file.path
+            if os.path.exists(file_path):
+                os.remove(file_path)
+
+        self.file.save(
+            f"{self.__class__.__name__}.png",
+            file,
+        )
+        self.save()
 
     class Meta:
         verbose_name = "نمودار سنسور"

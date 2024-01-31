@@ -35,9 +35,9 @@ class Command(BaseCommand):
         print("scheduler has started")
         while True:
             try:
+                sleep(10)
                 self.run_one_task()
             except KeyboardInterrupt:
                 print('Ended Monitoring with CTRL+C')
             except Exception:
                 print(traceback.format_exc())
-            sleep(10)
