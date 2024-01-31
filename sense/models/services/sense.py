@@ -179,6 +179,10 @@ class SenseWaterHeightPercentage(Sense):
         from RPi import GPIO
 
         GPIO.setmode(GPIO.BCM)
+
+        GPIO.setup(self.sensor.trig_pin, GPIO.OUT)
+        GPIO.setup(self.sensor.echo_pin, GPIO.IN)
+
         # Read distance from the HC-SR04 sensor
         distance = self.get_distance()
 
