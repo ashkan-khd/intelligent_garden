@@ -41,6 +41,7 @@ EXTERNAL_APPS = [
 CUSTOM_APPS = [
     'sense',
     'monitor',
+    'control',
     'utility',
 ]
 

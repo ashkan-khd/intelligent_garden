@@ -32,7 +32,7 @@ class SensorMonitor(models.Model):
             sensor = self.sensor.concrete_instance
             data: "Sense.SenseData" = sensor.sense()
             if data is not None:
-                SensorResult.objects.create(sensor=self.sensor, result=data.to_json())
+                SensorResult.objects.create(sensor=self.sensor, result=data.to_dict())
                 sensor.update_figure()
             self.last_monitor = timezone.now()
             self.save(update_fields=["last_monitor"])
