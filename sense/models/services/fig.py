@@ -56,6 +56,8 @@ class DrawLightIntensityFig(DrawFig):
         # Extracting data for plotting
         timestamps = [entry.created for entry in data]
         intensities = [self.get_sense_data(entry).light_level for entry in data]
+        intensities = [self.get_sense_data(entry).light_level for entry in data]
+        intensities = [self.get_sense_data(entry).light_level for entry in data]
 
         # Creating a plot
         plt.plot(timestamps, intensities)
