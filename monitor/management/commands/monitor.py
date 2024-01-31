@@ -34,6 +34,7 @@ class Command(BaseCommand):
         print("scheduler has started")
         while True:
             try:
+                print('waiting for 10 seconds...')
                 sleep(10)
                 self.run_one_task()
             except KeyboardInterrupt:
