@@ -36,7 +36,7 @@ class DrawFig(ABC):
         )
 
     def get_sense_data(self, sensor_result: "SensorResult") -> "Sense.SenseData":
-        return self.sensor.sense_class.SenseData.from_json(sensor_result.result)
+        return self.sensor.sense_class.SenseData.from_dict(sensor_result.result)
 
     @abstractmethod
     def _draw_fig(self, data):

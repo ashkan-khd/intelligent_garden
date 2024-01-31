@@ -1,4 +1,5 @@
 import time
+from django.conf import settings
 from django.db import models
 
 
@@ -20,11 +21,18 @@ class Buzzer(models.Model):
 
 
     def buzz(self, pitch, duration):
+        if not settings.PRODUCTION:
+            print('MOCK BUZZ!!')
+            return
+
         from RPi import GPIO
         try:
             self._buzz(pitch, duration)
         finally:
             GPIO.cleanup()
+
+    def __str__(self) -> str:
+        return f'هشداردهنده پین {self.pin}'
 
     class Meta:
         verbose_name = "هشداردهنده"

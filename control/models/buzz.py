@@ -33,15 +33,18 @@ class SensorBuzz(models.Model):
         self.save(update_fields=['last_effort'])
 
         
-        qs = self.sensor.results.filter(created__lte=self.for_how_long)
+        qs = self.sensor.results.filter(created__gte=timezone.now()-self.for_how_long)
         if not qs.exists():
             return False
-        if qs.count() != qs.filter(**json.loads(self.sensor_result_filters)).count():
+
+        if qs.count() != qs.filter(**self.sensor_result_filters).count():
             return False
 
         self.buzzer.buzz(self.pitch, self.duration)
         return True
 
+    def __str__(self) -> str:
+        return f'هشدار برای {str(self.sensor)} توسط {str(self.buzzer)}'
     class Meta:
-        verbose_name = "هشداردهنده"
-        verbose_name_plural = "هشداردهندگان"
+        verbose_name = "هشدار سنسور"
+        verbose_name_plural = "هشدارهای سنسور"
