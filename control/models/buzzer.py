@@ -26,6 +26,11 @@ class Buzzer(models.Model):
             return
 
         from RPi import GPIO
+
+        GPIO.setmode(GPIO.BCM)
+
+        GPIO.setup(self.pin, GPIO.OUT)
+
         try:
             self._buzz(pitch, duration)
         finally:
