@@ -86,16 +86,12 @@ class Sensor(models.Model):
 
             return SensorFigure.objects.create(sensor=self, file=None)
 
-    def get_updated_figure(self) -> "SensorFigure":
+    def update_figure(self) -> None:
         figure = self.get_figure()
         plot_file = self.fig_class(self).draw_fig()
         if plot_file:
             django_file = File(plot_file)
-            figure.file.save(
-                f"{self.__class__.__name__}.png", django_file,
-            )
-            figure.save()
-        return figure
+            figure.set_new_file(django_file)
 
     class Meta:
         verbose_name = "سنسور"

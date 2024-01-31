@@ -1,5 +1,5 @@
-import os
 from time import sleep
+import traceback
 from typing import Optional
 
 from django.core.management.base import BaseCommand
@@ -33,5 +33,12 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         print("scheduler has started")
         while True:
-            self.run_one_task()
-            sleep(10)
+            try:
+                print('waiting for 10 seconds...')
+                sleep(10)
+                self.run_one_task()
+            except KeyboardInterrupt:
+                print("Ended Monitoring with CTRL+C")
+                break
+            except Exception:
+                print(traceback.format_exc())

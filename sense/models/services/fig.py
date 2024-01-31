@@ -57,18 +57,22 @@ class DrawLightIntensityFig(DrawFig):
         timestamps = [entry.created for entry in data]
         intensities = [self.get_sense_data(entry).light_level for entry in data]
 
-        # Creating a plot
-        plt.plot(timestamps, intensities)
-        plt.xlabel("Time")
-        plt.ylabel("Light Intensity")
-        plt.title("Light Intensity Over 30 mins")
-        plt.xticks(rotation=45)
-        plt.tight_layout()
-        date_format = mdates.DateFormatter("%m-%d %H:%M")
-        plt.gca().xaxis.set_major_formatter(date_format)
+        # Creating a figure and an axes
+        fig, ax = plt.subplots(figsize=(8, 6))
+
+        # Plot light intensity
+        ax.plot(timestamps, intensities)
+        ax.set_xlabel("Time")
+        ax.set_ylabel("Light Intensity")
+        ax.set_title("Light Intensity Over 30 mins")
+        ax.xaxis.set_major_formatter(mdates.DateFormatter("%m-%d %H:%M"))
+        ax.tick_params(axis='x', rotation=45)
+        
+        # Adjust layout
+        fig.tight_layout()
 
         plot_file = BytesIO()
-        plt.savefig(plot_file, format="png")
+        fig.savefig(plot_file, format="png")
         plot_file.seek(0)
 
         return plot_file
@@ -80,24 +84,27 @@ class DrawSoilMoistureFig(DrawFig):
     def _draw_fig(self, data):
         # Extracting data for plotting
         timestamps = [entry.created for entry in data]
-        is_dry_values = [
-            self.get_sense_data(entry).digital_moisture_level for entry in data
-        ]
+        is_dry_values = [self.get_sense_data(entry).digital_moisture_level for entry in data]
 
-        # Creating a stair diagram
-        plt.step(timestamps, is_dry_values, where="post")
-        plt.xlabel("Time")
-        plt.ylabel("Soil Moisture")
-        plt.title("Soil Moisture Over 30 mins")
-        plt.xticks(rotation=45)
-        plt.yticks([0, 1], ["Not Dry", "Dry"])  # Adjust y-axis ticks for boolean values
-        plt.ylim(-0.1, 1.1)  # Set y-axis limits to accommodate boolean values
-        plt.tight_layout()
-        date_format = mdates.DateFormatter("%m-%d %H:%M")
-        plt.gca().xaxis.set_major_formatter(date_format)
+        # Creating a figure and an axes
+        fig, ax = plt.subplots(figsize=(8, 6))
+
+        # Plot soil moisture as a stair diagram
+        ax.step(timestamps, is_dry_values, where="post")
+        ax.set_xlabel("Time")
+        ax.set_ylabel("Soil Moisture")
+        ax.set_title("Soil Moisture Over 30 mins")
+        ax.xaxis.set_major_formatter(mdates.DateFormatter("%m-%d %H:%M"))
+        ax.tick_params(axis='x', rotation=45)
+        ax.yaxis.set_ticks([0, 1])  # Adjust y-axis ticks for boolean values
+        ax.yaxis.set_ticklabels(["Not Dry", "Dry"])  # Adjust y-axis labels for boolean values
+        ax.set_ylim(-0.1, 1.1)  # Set y-axis limits to accommodate boolean values
+
+        # Adjust layout
+        fig.tight_layout()
 
         plot_file = BytesIO()
-        plt.savefig(plot_file, format="png")
+        fig.savefig(plot_file, format="png")
         plot_file.seek(0)
 
         return plot_file
@@ -111,18 +118,22 @@ class DrawUltrasonicFig(DrawFig):
         timestamps = [entry.created for entry in data]
         intensities = [self.get_sense_data(entry).water_percentage for entry in data]
 
-        # Creating a plot
-        plt.plot(timestamps, intensities)
-        plt.xlabel("Time")
-        plt.ylabel("Water Level")
-        plt.title("Water Level Over 30 mins")
-        plt.xticks(rotation=45)
-        plt.tight_layout()
-        date_format = mdates.DateFormatter("%m-%d %H:%M")
-        plt.gca().xaxis.set_major_formatter(date_format)
+        # Creating a figure and an axes
+        fig, ax = plt.subplots(figsize=(8, 6))
+
+        # Plot water level
+        ax.plot(timestamps, intensities)
+        ax.set_xlabel("Time")
+        ax.set_ylabel("Water Level")
+        ax.set_title("Water Level Over 30 mins")
+        ax.xaxis.set_major_formatter(mdates.DateFormatter("%m-%d %H:%M"))
+        ax.tick_params(axis='x', rotation=45)
+
+        # Adjust layout
+        fig.tight_layout()
 
         plot_file = BytesIO()
-        plt.savefig(plot_file, format="png")
+        fig.savefig(plot_file, format="png")
         plot_file.seek(0)
 
         return plot_file

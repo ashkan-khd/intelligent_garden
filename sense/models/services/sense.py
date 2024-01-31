@@ -101,6 +101,9 @@ class SenseSoilMoisture(Sense):
         return GPIO.input(pin)
 
     def _sense(self) -> "SenseData":
+        from RPi import GPIO
+        GPIO.setmode(GPIO.BCM)
+
         # Read analog soil moisture level (0-1)
         analog_moisture_level = self.sense_gpio_pin(self.sensor.analog_pin)
 
@@ -111,7 +114,6 @@ class SenseSoilMoisture(Sense):
 
     def _final_callback(self):
         from RPi import GPIO
-
         GPIO.cleanup()
 
 
@@ -177,6 +179,10 @@ class SenseWaterHeightPercentage(Sense):
         from RPi import GPIO
 
         GPIO.setmode(GPIO.BCM)
+
+        GPIO.setup(self.sensor.trig_pin, GPIO.OUT)
+        GPIO.setup(self.sensor.echo_pin, GPIO.IN)
+
         # Read distance from the HC-SR04 sensor
         distance = self.get_distance()
 

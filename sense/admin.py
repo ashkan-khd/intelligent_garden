@@ -36,7 +36,7 @@ class SensorAdmin(ModelAdmin):
     get_str.short_description = "مشخصه"
 
     def get_fig(self, instance: Sensor):
-        figure: SensorFigure = instance.get_updated_figure()
+        figure: SensorFigure = instance.concrete_instance.get_figure()
         if figure.file and figure.file.url:
             return create_image_response(
                 figure.file,

@@ -29,9 +29,11 @@ class SensorMonitor(models.Model):
 
     def monitor(self):
         with transaction.atomic():
-            data: "Sense.SenseData" = self.sensor.concrete_instance.sense()
+            sensor = self.sensor.concrete_instance
+            data: "Sense.SenseData" = sensor.sense()
             if data is not None:
                 SensorResult.objects.create(sensor=self.sensor, result=data.to_json())
+                sensor.update_figure()
             self.last_monitor = timezone.now()
             self.save(update_fields=["last_monitor"])
 
