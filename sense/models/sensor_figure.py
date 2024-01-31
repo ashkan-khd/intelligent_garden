@@ -14,7 +14,7 @@ class SensorFigure(models.Model):
     file = models.FileField(verbose_name="فایل نمودار", null=True, blank=True)
 
     def set_new_file(self, file: File):
-        if self.file.url:
+        if self.file and self.file.url:
             file_path = self.file.path
             if os.path.exists(file_path):
                 os.remove(file_path)
